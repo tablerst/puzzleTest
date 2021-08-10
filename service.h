@@ -11,10 +11,24 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include "view.h"
+#include <time.h>
 using namespace std;
+/******************************************结构体的声明******************************************/
+struct Struct_Time										//用来存储计数时间，例如：11小时45分14秒 --> 11：45：14
+{
+	int h = 0;											//小时
+	int m = 0;											//分钟
+	int s = 0;											//秒
+	int total = 0;										//总共
+};
 
+struct pic {
+	IMAGE img;											//保存图片对象
+	int state;											//记录图片状态
+
+};
 /******************************************全局变量的声明******************************************/
-
+extern pic picArray[10];									//关卡图片状态
 extern int check[MAX_MAP][MAX_MAP];						//检查数组
 extern int map[MAX_MAP][MAX_MAP];						//序号储存
 extern int random[MAX_MAP * MAX_MAP];					//随机化数组
@@ -29,23 +43,10 @@ extern int mousej;										//标记鼠标位置
 extern int tend;										//时间
 extern int tbegin;										//开始时间
 extern double picturSmall;								//缩放因子
-
 /**************************************函数声明*********************************/
-
-//时间显示
-void showTime();
-
-//新增逆序数优化，保证每次都能完成拼图
-void Right_judge();
-
-//初始化随机数组
-void randArray();
-
-//暂停按键
-bool ifstop();
-
-//判定是否通关
-void judgeGraphics();
+void Right_judge();										//新增逆序数优化，保证每次都能完成拼图
+void randArray();										//初始化随机数组
+void judgeGraphics();									//判定是否通关
 
 /**
 	功能：判断是否重新选择图片开始游戏
@@ -68,17 +69,36 @@ bool isAgain();
  */
 void start(int judgePic);
 
+/**
+	功能：检测金币数是否足够，以及金币消耗
+	参数：空
+	返回值：空
+ */
+void chargeprice();
+
+void setGraphics();				//设置好图片位置及对应关系
+
+/**
+	功能：开启商店
+	参数：空
+	返回值：空
+ */
+void shopStart();
+
+/**
+	功能：游戏计时
+	参数：空
+	返回值：空
+*/
+void showTime();
+
+/**
+	功能：保存关卡图片到数组里
+	参数：空
+	返回值：空
+*/
+void savePicToArray();
 
 
 
-
-
-
-
-
-
-
-
-
-
-© 2021 GitHub, Inc.
+void loadPicFromArray();

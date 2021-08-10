@@ -1,15 +1,18 @@
 #include "main.h"
-
 int main() {
 begin:
 	showMenu();
 	switch (getMenuMouse()) {
 	case 0:				//开始
 		showDifficulty();
-		if (getDiffMouse() == 0) {//简单模式
+		switch (getDiffMouse()) {
+		case 0://简单模式
 			level = 2;
 		choosePic:
-			showPics();
+			showPicBk(0);
+			loadPicFromArray();
+			showPic(0);
+		choosePage:
 			switch (getPicMouse()) {
 			case 1:				//pic1
 				start(1);
@@ -51,11 +54,22 @@ begin:
 					goto choosePic;
 				}
 				break;
+			case 5:	//下一页
+				page = 1;
+				showPicBk(page);
+				showPic(page);
+				goto choosePage;
+				break;
+			case 6://上一页
+				page = 0;
+				showPicBk(page);
+				showPic(page);
+				goto choosePage;
+				break;
 			}
-		}
-		else if (getDiffMouse() == 1) {	//标准模式
+		case 1://标准模式
 			level = 3;
-			showPics();
+			//showPics();
 			switch (getPicMouse()) {
 			case 1:				//pic1
 				start(1);
@@ -98,10 +112,9 @@ begin:
 				}
 				break;
 			}
-		}
-		else if (getDiffMouse() == 2) {	//困难模式
+		case 2://困难模式
 			level = 4;
-			showPics();
+			//showPics();
 			switch (getPicMouse()) {
 			case 1:				//pic1
 				start(1);
@@ -144,13 +157,16 @@ begin:
 				}
 				break;
 			}
+		default:
+			break;
 		}
 		break;
 	case 1:				//商店
+		shopStart();
 		break;
 	case 2:				//排行榜
 		break;
-	case 3:				//游戏设置
+	case 3:				//音乐设置
 		//musicSets();
 		break;
 	case 4:				//退出

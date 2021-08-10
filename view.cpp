@@ -1,294 +1,145 @@
-#include "view.h"
-#include "service.h"
+#pragma once
+#include <graphics.h>
+#include <easyx.h>
+#include <string.h>
+#include <iostream>
+#define MAX_MAP 10									//定义最大范围
+using namespace std;
+/******************************页面相关的全局变量声明***************************************/
 
-IMAGE img_bk(0, 0);
-IMAGE img_showDifficulty(0, 0);
-IMAGE img_choosePic(0, 0);
-IMAGE img_small(0, 0);								//IMAGE实例，储存缩放图
+extern IMAGE img_bk;								//IMAGE类实例化，用来存储 主菜单页面图片
+extern IMAGE img_shop;								//IMAGE类实例化，用来存储 商店页面图片
+extern IMAGE img_showDifficulty;					//IMAGE类实例化，用来存储 选择困难度页面图片
+extern IMAGE img_choosePic;							//IMAGE类实例化，用来存储 商店里选择好的图片
+extern IMAGE img_total;								//IMAGE实例，存储待拼图片
+extern IMAGE img_blank;								//IMAGE实例，存储白底
+extern IMAGE img[MAX_MAP][MAX_MAP];					//IMAGE实例，储存分块图片
+extern IMAGE img_small;								//IMAGE实例，储存缩放图
+extern IMAGE img_shop;								//IMAGE实例，储存商店页面
+extern int FLAG;									//胜利标记
+extern int topPage;									//
+extern int page;									//关卡页数		
+/******************************页面相关的函数声明******************************************/
 
-void showMenu() {
-	loadimage(&img_bk, _T("bk.png"));
-	initgraph(img_bk.getwidth(), img_bk.getheight());
-	HWND hwnd = GetHWnd();
-	MoveWindow(hwnd, 400, 100, img_bk.getwidth(), img_bk.getheight(), false);
-	putimage(0, 0, &img_bk);
-}
+//-----------------------------------------------1.主流程-------------------------------------------------------------
+//===========================================1.1主流程页面函数========================================================
+/**
+	功能：展示主菜单页面
+	参数：空
+	返回值：空
+ */
+void showMenu();
 
-void reSetimg(IMAGE img[][MAX_MAP])
-{
-	int minxPic = img_total.getwidth() / MAX_MAP;
-	int minyPic = img_total.getheight() / MAX_MAP;
-	for (int i = 0; i < MAX_MAP; i++)
-	{
-		for (int j = 0; j < MAX_MAP; j++)
-		{
-			getimage(&img[i][j], i * minxPic, j * minyPic, minxPic, minyPic);
-		}
-	}
-}
+/**
+	功能：展示困难选择度页面
+	参数：空
+	返回值：空
+ */
+void showDifficulty();
 
-void showDifficulty() {
-	loadimage(&img_showDifficulty, _T("diff.png"));
-	initgraph(img_showDifficulty.getwidth(), img_showDifficulty.getheight());
-	HWND hwnd = GetHWnd();
-	MoveWindow(hwnd, 400, 100, img_showDifficulty.getwidth(), img_showDifficulty.getheight(), false);
-	putimage(0, 0, &img_showDifficulty);
-}
+/**
+	功能：展示开始游戏前图片选择
+	参数：空
+	返回值：空
+ */
+void showPic(int page);
+void showPicBk(int page);
 
-void showPics() {
-	loadimage(&img_choosePic, _T("choosePic.png"));
-	initgraph(img_choosePic.getwidth(), img_choosePic.getheight());
-	HWND hwnd = GetHWnd();
-	MoveWindow(hwnd, 400, 100, img_choosePic.getwidth(), img_choosePic.getheight(), false);
-	putimage(0, 0, &img_choosePic);
-}
+/**
+	功能：读取图片并预载到原图中
+	参数：
+		int类型的图片标识数字
+		1  -->  pic1（左上方）
+		2  -->  pic2（右上方）
+		3  -->  pic3（左下方）
+		4  -->  pic4（右下方）
+	返回值：空
+ */
+void getGraphics(int);
 
-void Set_rightview()
-{
-	putimage(img_total.getwidth() * 1.5, 0, &img_small);
-	setlinecolor(WHITE);
-	line(img_total.getwidth() * 1.5, img_total.getheight() / 2, img_total.getwidth() * 1.5, img_total.getheight());
-	line(img_total.getwidth() * 1.5, img_total.getheight() * 0.667, img_total.getwidth() * 2, img_total.getheight() * 0.667);
-	line(img_total.getwidth() * 1.5, img_total.getheight() * 0.833, img_total.getwidth() * 2, img_total.getheight() * 0.833);
+void lineFlush();										//画线条分割图片
 
-	settextcolor(WHITE);
-	settextstyle(30, 0, L"楷体", 0, 0, 0, false, false, false, DEFAULT_CHARSET, OUT_DEFAULT_PRECIS, CLIP_DEFAULT_PRECIS, PROOF_QUALITY, DEFAULT_PITCH);
-	
-	wchar_t s1[] = L"上为原图";
-	wchar_t s2[] = L"游戏用时";
-	wchar_t s3[] = L"暂停";
+void showGraphics();									//显示分块图片
 
-	outtextxy(img_total.getwidth() * 1.63, img_total.getheight() * 0.55, s1);
-	outtextxy(img_total.getwidth() * 1.63, img_total.getheight() * 0.717, s2);
-	outtextxy(img_total.getwidth() * 1.7, img_total.getheight() * 0.883, s3);
-}
+void setRightView();									//展示正确原图
 
-inline void lineFlush()								//画线条分割图片
-{
-	for (int i = 0; i < level; i++)
-	{
-		//setlinecolor(RED);			//可以更改线条颜色 默认白色
-		line(i * width_temp, 0, i * width_temp, img_total.getheight());
-		line(0, i * height_temp, img_total.getwidth(), i * height_temp);
-	}
-}
+//===========================================1.1主流程交互函数========================================================
+/**
+	功能：获取主菜单页面鼠标信息
+	参数：空
+	返回值：
+		返回0 --> 点击了“商店”按钮
+		返回1 --> 点击了“开始”按钮
+		返回2 --> 点击了“排行榜”按钮
+		返回3 --> 点击了“音乐设置”按钮
+		返回4 --> 点击了“退出”按钮
 
+ */
+int getMenuMouse();
 
+/**
+	功能：获取困难选择度页面鼠标信息
+	参数：空
+	返回值：
+		返回0 --> 点击了“简单”按钮
+		返回1 --> 点击了“标准”按钮
+		返回2 --> 点击了“困难”按钮
 
-int getMenuMouse() {
-	if (MouseHit()){
-		FlushMouseMsgBuffer();
-	}
-	MOUSEMSG menuMsg ;
-	while (true){
-		menuMsg = GetMouseMsg();
-		if (menuMsg.uMsg == WM_LBUTTONDOWN) {
-			if ((menuMsg.x >= 76 && menuMsg.x <= 287) && (menuMsg.y >= 83 && menuMsg.y <= 145)) {//开始按钮		
-				//closegraph();
-				return 0;
-			}
-			else if ((menuMsg.x >= 413 && menuMsg.x <= 626) && (menuMsg.y >= 83 && menuMsg.y <= 145)) {//商店按钮		
-				//closegraph();
-				return 1;
-			}
-			else if ((menuMsg.x >= 76 && menuMsg.x <= 287) && (menuMsg.y >= 362 && menuMsg.y <= 430)) {//游戏设置按钮
-				//closegraph();
-				return 2;
-			}
-			else if ((menuMsg.x >= 413 && menuMsg.x <= 626) && (menuMsg.y >= 362 && menuMsg.y <= 430)) {//排行榜	
-				//closegraph();
-				return 3;
-			}
-			else if ((menuMsg.x >= 288 && menuMsg.x <= 414) && (menuMsg.y >= 641 && menuMsg.y <= 684)) {//退出按钮
-				//closegraph();
-				return 4;
-			}
-		}
-	}
-	
-}
+ */
+int getDiffMouse();
 
-int getDiffMouse() {
-	if (MouseHit()){
-		FlushMouseMsgBuffer();
-	}
-	
-	MOUSEMSG diffMsg ;
-	while (true)
-	{
-		diffMsg = GetMouseMsg();
-		if (diffMsg.uMsg == WM_LBUTTONDOWN) {
-				if ((diffMsg.x >= 181 && diffMsg.x <= 545) && (diffMsg.y >= 191 && diffMsg.y <= 297)) {	//简单按钮		
-					return 0;
-				}
-				else if ((diffMsg.x >= 181 && diffMsg.x <= 545) && (diffMsg.y >= 333 && diffMsg.y <= 432)) {//标准按钮		
-					return 1;
-				}
-				else if ((diffMsg.x >= 181 && diffMsg.x <= 545) && (diffMsg.y >= 467 && diffMsg.y <= 567)) {//困难
-					return 2;
-				}
-	}
-	
-		
-	}
-}
+/**
+	功能：获取困难选择度页面鼠标信息
+	参数：空
+	返回值：
+		返回1 --> 点击了“pic1”图片（左上方）
+		返回2 --> 点击了“pic2”图片（右上方）
+		返回3 --> 点击了“pic3”图片（左下方）
+		返回4 --> 点击了“pic4”图片（右下方）
 
-int getPicMouse() {
-	if (MouseHit()){
-		FlushMouseMsgBuffer();
-	}
-	
-	MOUSEMSG picMsg ;
-	while (true)
-	{
-		picMsg = GetMouseMsg();
-		if (picMsg.uMsg == WM_LBUTTONDOWN) {
-			if ((picMsg.x >= 110 && picMsg.x <= 314) && (picMsg.y >= 147 && picMsg.y <= 386)) {	//pic1		
-				closegraph();
-				return 1;
-			}
-			else if ((picMsg.x >= 398 && picMsg.x <= 590) && (picMsg.y >= 147 && picMsg.y <= 386)) {//pic2		
-				closegraph();
-				return 2;
-			}
-			else if ((picMsg.x >= 110 && picMsg.x <= 314) && (picMsg.y >= 415 && picMsg.y <= 652)) {//pic3		
-				closegraph();
-				return 3;
-			}
-			else if ((picMsg.x >= 398 && picMsg.x <= 590) && (picMsg.y >= 415 && picMsg.y <= 652)) {//pic4		
-				closegraph();
-				return 4;
-			}
-		}
-	}
-}
+ */
+int getPicMouse();
+
+void getPlayingMouse();			//开始游戏时，获取鼠标操作
+
+//-----------------------------------------------2.商店-------------------------------------------------------------
+//===========================================2.1商店页面函数========================================================
+//
+/**
+	功能：是否购买提示
+	参数：空
+	返回值：
+		返回1 --> 购买
+		返回2 --> 取消
+ */
+bool isBuy();
+
+/**
+	功能：购买成功提示
+	参数：空
+	返回值:空
+ */
+void buySucceedInfo();
 
 
-int getShopPicMouse() {
-	FlushMouseMsgBuffer();
-	MOUSEMSG picMsg = GetMouseMsg();
-	if (picMsg.uMsg == WM_LBUTTONDOWN) {
-		if ((picMsg.x >= 204 && picMsg.x <= 362) && (picMsg.y >= 145 && picMsg.y <= 367)) {	//shoppic1		
-			closegraph();
-			return 1;
-		}
-		else if ((picMsg.x >= 436 && picMsg.x <= 608) && (picMsg.y >= 145 && picMsg.y <= 367)) {//shoppic2		
-			closegraph();
-			return 2;
-		}
-		else if ((picMsg.x >= 204 && picMsg.x <= 362) && (picMsg.y >= 413 && picMsg.y <= 658)) {//shoppic3		
-			closegraph();
-			return 3;
-		}
-		else if ((picMsg.x >= 436 && picMsg.x <= 608) && (picMsg.y >= 413 && picMsg.y <= 658)) {//shoppic4		
-			closegraph();
-			return 4;
-		}
-	}
-}
+/**
+	功能：展示商店页面
+	参数：空
+	返回值:空
+ */
+void showShop();
 
-void getPlayingMouse() {
-	MOUSEMSG msg = GetMouseMsg();
-	if (msg.uMsg == WM_LBUTTONDOWN)
-	{
-		if ((msg.x < img_total.getwidth()) && (msg.y < img_total.getheight()))
-		{
-			mousei = msg.x / width_temp;
-			mousej = msg.y / height_temp;
-			if ((mousei + 1 == flagi && mousej == flagj) ||
-				(mousei == flagi && mousej + 1 == flagj) ||
-				(mousei - 1 == flagi && mousej == flagj) ||
-				(mousei == flagi && mousej - 1 == flagj))
-			{
-				//交换图片分块
-				swap(map[mousej][mousei], map[flagj][flagi]);
-			}
-		}
-	}
-}
+void buyPic();					//购买图片
+//-----------------------------------------------3.音乐-------------------------------------------------------------
+void musicSets();				//音乐设置
 
-void showGraphics() {
-	for (int i = 0; i < level; i++)
-	{
-		for (int j = 0; j < level; j++)
-		{
-			if (map[j][i] == level * level - 1)				//逆转赋值2
-			{
-				flagi = i;
-				flagj = j;
-				putimage(i * width_temp, j * height_temp, &img_blank);
-			}
-			else
-			{
-				int countj = map[j][i] % level;
-				int counti = map[j][i] / level;
-				putimage(i * width_temp, j * height_temp, &img[countj][counti]);
-			}
-		}
-	}
-	lineFlush();
-}
 
-void getGraphics(int judgePic) {
-	switch (judgePic) {
-	case 1:
-		loadimage(&img_total, L"pic1.png");
-		loadimage(&img_small, L"pic1.png", img_total.getwidth() * picturSmall, img_total.getheight() * picturSmall);
-		loadimage(&img_blank, L"0.png", img_total.getwidth() / level, img_total.getheight() / level);
-		initgraph(img_total.getwidth() * 2, img_total.getheight());
-		setbkcolor(BLACK);
-		cleardevice();
-		break;
-	case 2:
-		loadimage(&img_total, L"pic2.png");
-		loadimage(&img_small, L"pic2.png", img_total.getwidth() * picturSmall, img_total.getheight() * picturSmall);
-		loadimage(&img_blank, L"0.png", img_total.getwidth() / level, img_total.getheight() / level);
-		initgraph(img_total.getwidth() * 2, img_total.getheight());
-		setbkcolor(BLACK);
-		cleardevice();
-		break;
-	case 3:
-		loadimage(&img_total, L"pic3.png");
-		loadimage(&img_small, L"pic3.png", img_total.getwidth() * picturSmall, img_total.getheight() * picturSmall);
-		loadimage(&img_blank, L"0.png", img_total.getwidth() / level, img_total.getheight() / level);
-		initgraph(img_total.getwidth() * 2, img_total.getheight());
-		setbkcolor(BLACK);
-		cleardevice();
-		break;
-	case 4:
-		loadimage(&img_total, L"pic4.png");
-		loadimage(&img_small, L"pic4.png", img_total.getwidth() * picturSmall, img_total.getheight() * picturSmall);
-		loadimage(&img_blank, L"0.png", img_total.getwidth() / level, img_total.getheight() / level);
-		initgraph(img_total.getwidth() * 2, img_total.getheight());
-		setbkcolor(BLACK);
-		cleardevice();
-		break;
-	default:
-		break;
-	}
-}
 
-void setGraphics() {
-	width_temp = img_total.getwidth() / level;
-	height_temp = img_total.getheight() / level;
 
-	//载入各分块的图片
-	SetWorkingImage(&img_total);
-	for (int i = 0; i < level; i++)
-	{
-		for (int j = 0; j < level; j++)
-			getimage(&img[i][j], i * width_temp, j * height_temp, width_temp, height_temp);
-	}
-	SetWorkingImage();
-	//校验数组初始化
-	int cnt = 0;
-	for (int i = 0; i < level; i++)
-	{
-		for (int j = 0; j < level; j++)
-		{
-			check[i][j] = cnt;
-			cnt++;
-		}
-	}
-	Set_rightview();
-}
+
+
+
+
+
+
+
