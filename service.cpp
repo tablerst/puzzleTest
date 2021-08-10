@@ -8,7 +8,7 @@ IMAGE img_total(0, 0);									//原图片
 IMAGE img_blank(0, 0);									//白底
 IMAGE img[MAX_MAP][MAX_MAP] = { (0,0) };				//储存分块图片
 
-int level = 4;											//关卡难度
+int level = 5;											//关卡难度
 int width_temp = 0;										//分块宽度
 int height_temp = 0;									//分块高度
 int flagi = 0;											//标记块行位置
