@@ -44,9 +44,14 @@ extern int tend;										//时间
 extern int tbegin;										//开始时间
 extern double picturSmall;								//缩放因子
 /**************************************函数声明*********************************/
-void Right_judge();										//新增逆序数优化，保证每次都能完成拼图
-void randArray();										//初始化随机数组
-void judgeGraphics();									//判定是否通关
+//新增逆序数优化，保证每次都能完成拼图
+void Right_judge();
+
+//初始化随机数组
+void randArray();
+
+//判定是否通关
+void judgeGraphics();
 
 /**
 	功能：判断是否重新选择图片开始游戏
@@ -76,7 +81,8 @@ void start(int judgePic);
  */
 void chargeprice();
 
-void setGraphics();				//设置好图片位置及对应关系
+//设置好图片位置及对应关系
+void setGraphics();
 
 /**
 	功能：开启商店
