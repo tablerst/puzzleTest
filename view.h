@@ -57,11 +57,14 @@ void showPicBk(int page);
  */
 void getGraphics(int);
 
-void lineFlush();										//画线条分割图片
+//画线条分割图片
+void lineFlush();
 
-void showGraphics();									//显示分块图片
+//显示分块图片
+void showGraphics();
 
-void setRightView();									//展示正确原图
+//展示正确原图
+void setRightView();
 
 //===========================================1.1主流程交互函数========================================================
 /**
@@ -129,9 +132,11 @@ void buySucceedInfo();
  */
 void showShop();
 
-void buyPic();					//购买图片
+//购买图片
+void buyPic();
 //-----------------------------------------------3.音乐-------------------------------------------------------------
-void musicSets();				//音乐设置
+//音乐设置
+void musicSets();
 
 
 
