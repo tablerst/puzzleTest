@@ -13,58 +13,58 @@
 #include "view.h"
 using namespace std;
 
-/******************************************È«¾Ö±äÁ¿µÄÉùÃ÷******************************************/
+/******************************************å…¨å±€å˜é‡çš„å£°æ˜******************************************/
 
-extern int check[MAX_MAP][MAX_MAP];						//¼ì²éÊı×é
-extern int map[MAX_MAP][MAX_MAP];						//ĞòºÅ´¢´æ
-extern int random[MAX_MAP * MAX_MAP];					//Ëæ»ú»¯Êı×é
+extern int check[MAX_MAP][MAX_MAP];						//æ£€æŸ¥æ•°ç»„
+extern int map[MAX_MAP][MAX_MAP];						//åºå·å‚¨å­˜
+extern int random[MAX_MAP * MAX_MAP];					//éšæœºåŒ–æ•°ç»„
 
-extern int level;										//¹Ø¿¨ÄÑ¶È
-extern int width_temp;									//·Ö¿é¿í¶È
-extern int height_temp;									//·Ö¿é¸ß¶È
-extern int flagi;										//±ê¼Ç¿éĞĞÎ»ÖÃ
-extern int flagj;										//±ê¼Ç¿éÁĞÎ»ÖÃ
-extern int mousei;										//±ê¼ÇÊó±êÎ»ÖÃ
-extern int mousej;										//±ê¼ÇÊó±êÎ»ÖÃ
-extern int tend;										//Ê±¼ä
-extern int tbegin;										//¿ªÊ¼Ê±¼ä
-extern double picturSmall;								//Ëõ·ÅÒò×Ó
+extern int level;										//å…³å¡éš¾åº¦
+extern int width_temp;									//åˆ†å—å®½åº¦
+extern int height_temp;									//åˆ†å—é«˜åº¦
+extern int flagi;										//æ ‡è®°å—è¡Œä½ç½®
+extern int flagj;										//æ ‡è®°å—åˆ—ä½ç½®
+extern int mousei;										//æ ‡è®°é¼ æ ‡ä½ç½®
+extern int mousej;										//æ ‡è®°é¼ æ ‡ä½ç½®
+extern int tend;										//æ—¶é—´
+extern int tbegin;										//å¼€å§‹æ—¶é—´
+extern double picturSmall;								//ç¼©æ”¾å› å­
 
-/**************************************º¯ÊıÉùÃ÷*********************************/
+/**************************************å‡½æ•°å£°æ˜*********************************/
 
-//Ê±¼äÏÔÊ¾
+//æ—¶é—´æ˜¾ç¤º
 void showTime();
 
-//ĞÂÔöÄæĞòÊıÓÅ»¯£¬±£Ö¤Ã¿´Î¶¼ÄÜÍê³ÉÆ´Í¼
+//æ–°å¢é€†åºæ•°ä¼˜åŒ–ï¼Œä¿è¯æ¯æ¬¡éƒ½èƒ½å®Œæˆæ‹¼å›¾
 void Right_judge();
 
-//³õÊ¼»¯Ëæ»úÊı×é
+//åˆå§‹åŒ–éšæœºæ•°ç»„
 void randArray();
 
-//ÔİÍ£°´¼ü
+//æš‚åœæŒ‰é”®
 bool ifstop();
 
-//ÅĞ¶¨ÊÇ·ñÍ¨¹Ø
+//åˆ¤å®šæ˜¯å¦é€šå…³
 void judgeGraphics();
 
 /**
-	¹¦ÄÜ£ºÅĞ¶ÏÊÇ·ñÖØĞÂÑ¡ÔñÍ¼Æ¬¿ªÊ¼ÓÎÏ·
-	²ÎÊı£º¿Õ
-	·µ»ØÖµ£º
-		true --> ÖØĞÂÑ¡ÔñÍ¼Æ¬¿ªÊ¼ÓÎÏ·
-		false --> ·µ»ØÖ÷²Ëµ¥
+	åŠŸèƒ½ï¼šåˆ¤æ–­æ˜¯å¦é‡æ–°é€‰æ‹©å›¾ç‰‡å¼€å§‹æ¸¸æˆ
+	å‚æ•°ï¼šç©º
+	è¿”å›å€¼ï¼š
+		true --> é‡æ–°é€‰æ‹©å›¾ç‰‡å¼€å§‹æ¸¸æˆ
+		false --> è¿”å›ä¸»èœå•
 */
-bool isAgain();		
+bool isAgain();
 
 /**
-	¹¦ÄÜ£º¿ªÊ¼ÓÎÏ·²Ù×÷
-	²ÎÊı£º
-		intÀàĞÍµÄÍ¼Æ¬±êÊ¶Êı×Ö
-		1  -->  pic1£¨×óÉÏ·½£©
-		2  -->  pic2£¨ÓÒÉÏ·½£©
-		3  -->  pic3£¨×óÏÂ·½£©
-		4  -->  pic4£¨ÓÒÏÂ·½£©
-	·µ»ØÖµ£º¿Õ
+	åŠŸèƒ½ï¼šå¼€å§‹æ¸¸æˆæ“ä½œ
+	å‚æ•°ï¼š
+		intç±»å‹çš„å›¾ç‰‡æ ‡è¯†æ•°å­—
+		1  -->  pic1ï¼ˆå·¦ä¸Šæ–¹ï¼‰
+		2  -->  pic2ï¼ˆå³ä¸Šæ–¹ï¼‰
+		3  -->  pic3ï¼ˆå·¦ä¸‹æ–¹ï¼‰
+		4  -->  pic4ï¼ˆå³ä¸‹æ–¹ï¼‰
+	è¿”å›å€¼ï¼šç©º
  */
 void start(int judgePic);
 
@@ -81,3 +81,4 @@ void start(int judgePic);
 
 
 
+Â© 2021 GitHub, Inc.

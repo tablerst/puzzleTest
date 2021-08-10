@@ -4,160 +4,160 @@ int main() {
 begin:
 	showMenu();
 	switch (getMenuMouse()) {
-		case 0:				//ø™ º
-			showDifficulty();
-			if (getDiffMouse() == 0) {//ºÚµ•ƒ£ Ω
-				level = 2;
-			choosePic:
-				showPics();
-				switch (getPicMouse()) {
-				case 1:				//pic1
-					start(1);
-					if (!isAgain()) {
-						closegraph();
-						goto begin;
-					}
-					else {
-						goto choosePic;
-					}
-					break;
-				case 2:				//pic2
-					start(2);
-					if (!isAgain()) {
-						closegraph();
-						goto begin;
-					}
-					else {
-						goto choosePic;
-					}
-					break;
-				case 3:				//pic3
-					start(3);
-					if (!isAgain()) {
-						closegraph();
-						goto begin;
-					}
-					else {
-						goto choosePic;
-					}
-					break;
-				case 4:				//pic4
-					start(4);
-					if (!isAgain()) {
-						closegraph();
-						goto begin;
-					}
-					else {
-						goto choosePic;
-					}
-					break;
+	case 0:				//ÂºÄÂßã
+		showDifficulty();
+		if (getDiffMouse() == 0) {//ÁÆÄÂçïÊ®°Âºè
+			level = 2;
+		choosePic:
+			showPics();
+			switch (getPicMouse()) {
+			case 1:				//pic1
+				start(1);
+				if (!isAgain()) {
+					closegraph();
+					goto begin;
 				}
-			}
-			else if (getDiffMouse() == 1) {	//±Í◊ºƒ£ Ω
-				level = 3;
-				showPics();
-				switch (getPicMouse()) {
-				case 1:				//pic1
-					start(1);
-					if (!isAgain()) {
-						closegraph();
-						goto begin;
-					}
-					else {
-						goto choosePic;
-					}
-					break;
-				case 2:				//pic2
-					start(2);
-					if (!isAgain()) {
-						closegraph();
-						goto begin;
-					}
-					else {
-						goto choosePic;
-					}
-					break;
-				case 3:				//pic3
-					start(3);
-					if (!isAgain()) {
-						closegraph();
-						goto begin;
-					}
-					else {
-						goto choosePic;
-					}
-					break;
-				case 4:				//pic4
-					start(4);
-					if (!isAgain()) {
-						closegraph();
-						goto begin;
-					}
-					else {
-						goto choosePic;
-					}
-					break;
+				else {
+					goto choosePic;
 				}
-			}
-			else if (getDiffMouse() == 2) {	//¿ßƒ—ƒ£ Ω
-				level = 4;
-				showPics();
-				switch (getPicMouse()) {
-				case 1:				//pic1
-					start(1);
-					if (!isAgain()) {
-						closegraph();
-						goto begin;
-					}
-					else {
-						goto choosePic;
-					}
-					break;
-				case 2:				//pic2
-					start(2);
-					if (!isAgain()) {
-						closegraph();
-						goto begin;
-					}
-					else {
-						goto choosePic;
-					}
-					break;
-				case 3:				//pic3
-					start(3);
-					if (!isAgain()) {
-						closegraph();
-						goto begin;
-					}
-					else {
-						goto choosePic;
-					}
-					break;
-				case 4:				//pic4
-					start(4);
-					if (!isAgain()) {
-						closegraph();
-						goto begin;
-					}
-					else {
-						goto choosePic;
-					}
-					break;
+				break;
+			case 2:				//pic2
+				start(2);
+				if (!isAgain()) {
+					closegraph();
+					goto begin;
 				}
+				else {
+					goto choosePic;
+				}
+				break;
+			case 3:				//pic3
+				start(3);
+				if (!isAgain()) {
+					closegraph();
+					goto begin;
+				}
+				else {
+					goto choosePic;
+				}
+				break;
+			case 4:				//pic4
+				start(4);
+				if (!isAgain()) {
+					closegraph();
+					goto begin;
+				}
+				else {
+					goto choosePic;
+				}
+				break;
 			}
-			break;
-		case 1:				//…ÃµÍ
-			break;
-		case 2:				//≈≈––∞Ò
-			break;
-		case 3:				//”Œœ∑…Ë÷√
-			//musicSets();
-			break;
-		case 4:				//ÕÀ≥ˆ
-			closegraph();
-			exit(0);
-			break;
-		default:
-			break;
+		}
+		else if (getDiffMouse() == 1) {	//Ê†áÂáÜÊ®°Âºè
+			level = 3;
+			showPics();
+			switch (getPicMouse()) {
+			case 1:				//pic1
+				start(1);
+				if (!isAgain()) {
+					closegraph();
+					goto begin;
+				}
+				else {
+					goto choosePic;
+				}
+				break;
+			case 2:				//pic2
+				start(2);
+				if (!isAgain()) {
+					closegraph();
+					goto begin;
+				}
+				else {
+					goto choosePic;
+				}
+				break;
+			case 3:				//pic3
+				start(3);
+				if (!isAgain()) {
+					closegraph();
+					goto begin;
+				}
+				else {
+					goto choosePic;
+				}
+				break;
+			case 4:				//pic4
+				start(4);
+				if (!isAgain()) {
+					closegraph();
+					goto begin;
+				}
+				else {
+					goto choosePic;
+				}
+				break;
+			}
+		}
+		else if (getDiffMouse() == 2) {	//Âõ∞ÈöæÊ®°Âºè
+			level = 4;
+			showPics();
+			switch (getPicMouse()) {
+			case 1:				//pic1
+				start(1);
+				if (!isAgain()) {
+					closegraph();
+					goto begin;
+				}
+				else {
+					goto choosePic;
+				}
+				break;
+			case 2:				//pic2
+				start(2);
+				if (!isAgain()) {
+					closegraph();
+					goto begin;
+				}
+				else {
+					goto choosePic;
+				}
+				break;
+			case 3:				//pic3
+				start(3);
+				if (!isAgain()) {
+					closegraph();
+					goto begin;
+				}
+				else {
+					goto choosePic;
+				}
+				break;
+			case 4:				//pic4
+				start(4);
+				if (!isAgain()) {
+					closegraph();
+					goto begin;
+				}
+				else {
+					goto choosePic;
+				}
+				break;
+			}
+		}
+		break;
+	case 1:				//ÂïÜÂ∫ó
+		break;
+	case 2:				//ÊéíË°åÊ¶ú
+		break;
+	case 3:				//Ê∏∏ÊàèËÆæÁΩÆ
+		//musicSets();
+		break;
+	case 4:				//ÈÄÄÂá∫
+		closegraph();
+		exit(0);
+		break;
+	default:
+		break;
 	}
 }

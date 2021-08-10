@@ -1,28 +1,28 @@
 #include "service.h"
 
-//³õÊ¼»¯È«¾Ö±äÁ¿
-int check[MAX_MAP][MAX_MAP] = { 0 };					//¼ì²éÊı×é
-int map[MAX_MAP][MAX_MAP] = { 0 };						//ĞòºÅ´¢´æ
-int random[MAX_MAP * MAX_MAP] = { 0 };					//Ëæ»ú»¯Êı×é
-IMAGE img_total(0, 0);									//Ô­Í¼Æ¬
-IMAGE img_blank(0, 0);									//°×µ×
-IMAGE img[MAX_MAP][MAX_MAP] = { (0,0) };				//´¢´æ·Ö¿éÍ¼Æ¬
+//åˆå§‹åŒ–å…¨å±€å˜é‡
+int check[MAX_MAP][MAX_MAP] = { 0 };					//æ£€æŸ¥æ•°ç»„
+int map[MAX_MAP][MAX_MAP] = { 0 };						//åºå·å‚¨å­˜
+int random[MAX_MAP * MAX_MAP] = { 0 };					//éšæœºåŒ–æ•°ç»„
+IMAGE img_total(0, 0);									//åŸå›¾ç‰‡
+IMAGE img_blank(0, 0);									//ç™½åº•
+IMAGE img[MAX_MAP][MAX_MAP] = { (0,0) };				//å‚¨å­˜åˆ†å—å›¾ç‰‡
 
 //oyeahhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh
-int level = 6;											//¹Ø¿¨ÄÑ¶È
-int width_temp = 0;										//·Ö¿é¿í¶È
-int height_temp = 0;									//·Ö¿é¸ß¶È
-int flagi = 0;											//±ê¼Ç¿éĞĞÎ»ÖÃ
-int flagj = 0;											//±ê¼Ç¿éÁĞÎ»ÖÃ
-int mousei = 0;											//±ê¼ÇÊó±êÎ»ÖÃ
-int mousej = 0;											//±ê¼ÇÊó±êÎ»ÖÃ
-int FLAG = 0;											//Ê¤Àû±ê¼Ç
-int tend = 0;											//Ê±¼ä
-int tbegin = 0;											//¿ªÊ¼Ê±¼ä
-double picturSmall = 0.5;								//Ëõ·ÅÒò×Ó
+int level = 6;											//å…³å¡éš¾åº¦
+int width_temp = 0;										//åˆ†å—å®½åº¦
+int height_temp = 0;									//åˆ†å—é«˜åº¦
+int flagi = 0;											//æ ‡è®°å—è¡Œä½ç½®
+int flagj = 0;											//æ ‡è®°å—åˆ—ä½ç½®
+int mousei = 0;											//æ ‡è®°é¼ æ ‡ä½ç½®
+int mousej = 0;											//æ ‡è®°é¼ æ ‡ä½ç½®
+int FLAG = 0;											//èƒœåˆ©æ ‡è®°
+int tend = 0;											//æ—¶é—´
+int tbegin = 0;											//å¼€å§‹æ—¶é—´
+double picturSmall = 0.5;								//ç¼©æ”¾å› å­
 
 
-inline void Right_judge(){										
+inline void Right_judge() {
 	int Right_judgei = 0, Rightjudge[MAX_MAP * MAX_MAP], num = 0;
 	memset(Rightjudge, 0, sizeof(Rightjudge));
 	for (int i = 0; i < level; i++)
@@ -48,7 +48,7 @@ inline void Right_judge(){
 inline void showTime()
 {
 	TCHAR s5[3600];
-	_stprintf_s(s5, L"%.2fÃë", (tend - tbegin) / (double)CLOCKS_PER_SEC);
+	_stprintf_s(s5, L"%.2fç§’", (tend - tbegin) / (double)CLOCKS_PER_SEC);
 	outtextxy(img_total.getwidth() * 1.67, img_total.getwidth() + 30, s5);
 }
 
@@ -59,15 +59,15 @@ void randArray() {
 	random[level * level - 1] = level * level - 1;
 
 	random_device rd;
-	mt19937 g(rd());									// Ëæ»úÊıÒıÇæ
-	shuffle(random, random + level * level - 1, g);			// ´òÂÒË³Ğò
+	mt19937 g(rd());									// éšæœºæ•°å¼•æ“
+	shuffle(random, random + level * level - 1, g);			// æ‰“ä¹±é¡ºåº
 
 	int cnt = 0;
 	for (int i = 0; i < level; i++)
 	{
 		for (int j = 0; j < level; j++)
 		{
-			map[j][i] = random[cnt];					//Äæ×ª¸³Öµ1
+			map[j][i] = random[cnt];					//é€†è½¬èµ‹å€¼1
 			cnt++;
 		}
 	}
@@ -86,18 +86,18 @@ void judgeGraphics() {
 	}
 	if (cnt == level * level)
 	{
-		MessageBox(GetHWnd(), _T("¹ı¹ØÁË."), _T("ÏûÏ¢ÌáÊ¾."), MB_OK);
+		MessageBox(GetHWnd(), _T("è¿‡å…³äº†."), _T("æ¶ˆæ¯æç¤º."), MB_OK);
 		FLAG = 1;
 		//exit(0);
 	}
 }
 
 bool isAgain() {
-	UINT  dr = MessageBox(GetHWnd(),_T("ÊÇ·ñÖØÍæ£¿"),_T("ÏûÏ¢ÌáÊ¾"), MB_YESNO);
-	if (dr == IDYES){
+	UINT  dr = MessageBox(GetHWnd(), _T("æ˜¯å¦é‡ç©ï¼Ÿ"), _T("æ¶ˆæ¯æç¤º"), MB_YESNO);
+	if (dr == IDYES) {
 		return true;
 	}
-	else if (dr == IDNO){
+	else if (dr == IDNO) {
 		return false;
 	}
 }
@@ -115,7 +115,7 @@ bool ifstop()
 		{
 			if (msgstop.uMsg == WM_LBUTTONDOWN)
 			{
-				UINT  dr = MessageBox(GetHWnd(), _T("ÖØÍæ£¿"), _T("ÏûÏ¢ÌáÊ¾"), MB_YESNO);
+				UINT  dr = MessageBox(GetHWnd(), _T("é‡ç©ï¼Ÿ"), _T("æ¶ˆæ¯æç¤º"), MB_YESNO);
 				if (dr == IDYES) {
 					return true;
 				}
@@ -127,7 +127,7 @@ bool ifstop()
 	}
 }
 
-void start(int judgePic )
+void start(int judgePic)
 {
 	tbegin = clock();
 	getGraphics(judgePic);
@@ -135,15 +135,15 @@ void start(int judgePic )
 	randArray();
 	showGraphics();
 
-	while (1){
+	while (1) {
 		tend = clock();
 		showTime();
-		BeginBatchDraw();			//Ë«»º³å·ÀÖ¹ÉÁË¸
+		BeginBatchDraw();			//åŒç¼“å†²é˜²æ­¢é—ªçƒ
 		getPlayingMouse();
 		showGraphics();
-		EndBatchDraw();				//Ë«»º³å·ÀÖ¹ÉÁË¸
+		EndBatchDraw();				//åŒç¼“å†²é˜²æ­¢é—ªçƒ
 		judgeGraphics();
-		
+
 		if (FLAG == 1)
 		{
 			FLAG = 0;
@@ -152,4 +152,3 @@ void start(int judgePic )
 	}
 	//system("pause");
 }
-
